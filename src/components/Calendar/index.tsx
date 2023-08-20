@@ -15,7 +15,6 @@ import {
     previousMonth
 } from "../../helpers";
 import { DateType } from "../../types";
-import Timepicker from "../TimePicker";
 import {
     ChevronLeftIcon,
     ChevronRightIcon,
@@ -28,6 +27,8 @@ import Days from "./Days";
 import Months from "./Months";
 import Week from "./Week";
 import Years from "./Years";
+
+import Timepicker from "components/Timepicker";
 
 interface Props {
     date: dayjs.Dayjs;

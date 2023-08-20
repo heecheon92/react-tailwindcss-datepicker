@@ -11,7 +11,7 @@ export interface TimepickerProps {
 }
 
 export default function Timepicker(props: TimepickerProps) {
-    const { primaryColor, period, disabledDates } = useContext(DatepickerContext);
+    const { primaryColor } = useContext(DatepickerContext);
     const [hour, setHour] = useState("01");
     const [minute, setMinute] = useState("00");
     const [ampm, setAMPM] = useState("am");
