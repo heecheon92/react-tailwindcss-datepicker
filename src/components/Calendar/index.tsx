@@ -14,6 +14,8 @@ import {
     nextMonth,
     previousMonth
 } from "../../helpers";
+import { DateType } from "../../types";
+import Timepicker from "../TimePicker";
 import {
     ChevronLeftIcon,
     ChevronRightIcon,
@@ -26,8 +28,6 @@ import Days from "./Days";
 import Months from "./Months";
 import Week from "./Week";
 import Years from "./Years";
-
-import { DateType } from "types";
 
 interface Props {
     date: dayjs.Dayjs;
@@ -59,7 +59,9 @@ const Calendar: React.FC<Props> = ({
         asSingle,
         i18n,
         startWeekOn,
-        input
+        input,
+        showTimepicker,
+        changeTimepickerValue
     } = useContext(DatepickerContext);
     loadLanguageModule(i18n);
 
@@ -118,14 +120,16 @@ const Calendar: React.FC<Props> = ({
         (day: number, month = date.month() + 1, year = date.year()) => {
             const fullDay = `${year}-${month}-${day}`;
             let newStart;
-            let newEnd = null;
+            let newEnd: string | null = null;
 
             function chosePeriod(start: string, end: string) {
                 const ipt = input?.current;
                 changeDatepickerValue(
                     {
                         startDate: dayjs(start).format(DATE_FORMAT),
-                        endDate: dayjs(end).format(DATE_FORMAT)
+                        endDate: dayjs(end).format(DATE_FORMAT),
+                        startTime: period.startTime,
+                        endTime: period.endTime
                     },
                     ipt
                 );
@@ -138,7 +142,9 @@ const Calendar: React.FC<Props> = ({
                 }
                 changePeriod({
                     start: null,
-                    end: null
+                    end: null,
+                    startTime: period.startTime,
+                    endTime: period.endTime
                 });
             }
 
@@ -180,22 +186,49 @@ const Calendar: React.FC<Props> = ({
             if (!(newEnd && newStart) || showFooter) {
                 changePeriod({
                     start: newStart,
-                    end: newEnd
+                    end: newEnd,
+                    startTime: period.startTime,
+                    endTime: period.endTime
                 });
             }
         },
         [
             asSingle,
             changeDatepickerValue,
+            changeTimepickerValue,
             changeDayHover,
             changePeriod,
             date,
             hideDatepicker,
+            showTimepicker,
             period.end,
             period.start,
             showFooter,
             input
         ]
+    );
+
+    const clickTime = useCallback(
+        (hour: string, minute: string, ampm: string) => {
+            const ipt = input?.current;
+            changePeriod({
+                start: period.start,
+                end: period.end,
+                startTime: `${hour}:${minute}:${ampm}`,
+                endTime: `${hour}:${minute}:${ampm}`
+            });
+
+            changeTimepickerValue(
+                {
+                    startDate: dayjs(date).format(DATE_FORMAT),
+                    endDate: dayjs(date).format(DATE_FORMAT),
+                    startTime: period.startTime,
+                    endTime: period.endTime
+                },
+                ipt
+            );
+        },
+        [clickDay, date]
     );
 
     const clickPreviousDays = useCallback(
@@ -339,6 +372,8 @@ const Calendar: React.FC<Props> = ({
                     </>
                 )}
             </div>
+
+            {showTimepicker && asSingle && <Timepicker date={date} onSelect={clickTime} />}
         </div>
     );
 };

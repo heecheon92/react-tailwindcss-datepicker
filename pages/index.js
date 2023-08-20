@@ -52,6 +52,7 @@ export default function Playground() {
             <div className="max-w-md mx-auto my-4">
                 <Datepicker
                     value={value}
+                    showTimepicker={true}
                     primaryColor={primaryColor}
                     onChange={handleChange}
                     useRange={useRange}

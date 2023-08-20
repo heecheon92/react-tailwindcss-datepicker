@@ -5,6 +5,8 @@ import { COLORS } from "../constants";
 export interface Period {
     start: string | null;
     end: string | null;
+    startTime?: string | null;
+    endTime?: string | null;
 }
 
 interface CustomShortcuts {
@@ -36,10 +38,13 @@ export interface ShortcutsItem {
 }
 
 export type DateType = string | null | Date;
+export type TimeType = string | null;
 
 export type DateRangeType = {
     startDate: DateType;
     endDate: DateType;
+    startTime?: TimeType;
+    endTime?: TimeType;
 };
 
 export type DateValueType = DateRangeType | null;
@@ -82,6 +87,7 @@ export interface DatepickerType {
     disabledDates?: DateRangeType[] | null;
     startWeekOn?: string | null;
     popoverDirection?: PopoverDirectionType;
+    showTimepicker?: boolean;
 }
 
 export type ColorKeys = (typeof COLORS)[number]; // "blue" | "orange"

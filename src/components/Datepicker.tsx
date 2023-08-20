@@ -41,7 +41,8 @@ const Datepicker: React.FC<DatepickerType> = ({
     inputName,
     startWeekOn = "sun",
     classNames = undefined,
-    popoverDirection = undefined
+    popoverDirection = undefined,
+    showTimepicker = false
 }) => {
     // Ref
     const containerRef = useRef<HTMLDivElement | null>(null);
@@ -260,6 +261,7 @@ const Datepicker: React.FC<DatepickerType> = ({
             changeInputText: (newText: string) => setInputText(newText),
             updateFirstDate: (newDate: dayjs.Dayjs) => firstGotoDate(newDate),
             changeDatepickerValue: onChange,
+            changeTimepickerValue: onChange,
             showFooter,
             placeholder,
             separator,
@@ -282,7 +284,8 @@ const Datepicker: React.FC<DatepickerType> = ({
             classNames,
             onChange,
             input: inputRef,
-            popoverDirection
+            popoverDirection,
+            showTimepicker
         };
     }, [
         asSingle,
@@ -315,7 +318,8 @@ const Datepicker: React.FC<DatepickerType> = ({
         classNames,
         inputRef,
         popoverDirection,
-        firstGotoDate
+        firstGotoDate,
+        showTimepicker
     ]);
 
     const containerClassNameOverload = useMemo(() => {
@@ -376,7 +380,6 @@ const Datepicker: React.FC<DatepickerType> = ({
                                 )}
                             </div>
                         </div>
-
                         {showFooter && <Footer />}
                     </div>
                 </div>

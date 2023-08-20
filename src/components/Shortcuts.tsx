@@ -40,7 +40,9 @@ const ItemTemplate = React.memo((props: ItemTemplateProps) => {
             if (period.start || period.end) {
                 changePeriod({
                     start: null,
-                    end: null
+                    end: null,
+                    startTime: period.startTime,
+                    endTime: period.endTime
                 });
             }
             changePeriod(item);
