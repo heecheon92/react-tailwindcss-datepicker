@@ -19,13 +19,24 @@ export default function Timepicker(props: TimepickerProps) {
     useEffect(() => {
         if (value && value.startTime && value.endTime) {
             const [h, m, a] = value.startTime.split(":");
-            setHour(h);
-            setMinute(m);
-            setAMPM(a);
+            if ((h && m && a && h.length > 0, m.length > 0 && a.length > 0)) {
+                let nHour: number = parseInt(h);
+                nHour = nHour < 12 ? nHour : nHour - 12;
+                let sHour = `${nHour === 0 ? 12 : nHour}`;
+                sHour = sHour.length < 2 ? `0${sHour}` : sHour;
+                setHour(sHour);
+                setMinute(m);
+                setAMPM(a);
+            }
+        } else {
+            setHour("");
+            setMinute("");
+            setAMPM("am");
+            setIsChecked(false);
         }
     }, [value]);
 
-    const onInternalStateChange = useCallback((hour: string, minute: string, ampm: string) => {
+    const onSelect = useCallback((hour: string, minute: string, ampm: string) => {
         if (hour.length === 0 || minute.length === 0) {
             return;
         }
@@ -63,7 +74,7 @@ export default function Timepicker(props: TimepickerProps) {
                     onChange={() => {
                         setIsChecked(!isChecked);
                         setAMPM(isChecked ? "am" : "pm");
-                        onInternalStateChange(hour, minute, isChecked ? "am" : "pm");
+                        onSelect(hour, minute, isChecked ? "am" : "pm");
                     }}
                 />
                 <span
@@ -94,10 +105,10 @@ export default function Timepicker(props: TimepickerProps) {
                     value={hour}
                     onChange={e => {
                         setHour(e.target.value);
-                        onInternalStateChange(e.target.value, minute, ampm);
+                        onSelect(e.target.value, minute, ampm);
                     }}
                 >
-                    <option value="" selected disabled hidden>
+                    <option value="" disabled hidden>
                         시간
                     </option>
                     <option value="01">1</option>
@@ -121,10 +132,10 @@ export default function Timepicker(props: TimepickerProps) {
                     className="form-select mr-4 transition duration-300 ease-in-out bg-transparent outline-none appearance-none text-md hover:opacity-80 hover:-translate-y-[2px] hover:scale-105 rounded-md"
                     onChange={e => {
                         setMinute(e.target.value);
-                        onInternalStateChange(hour, e.target.value, ampm);
+                        onSelect(hour, e.target.value, ampm);
                     }}
                 >
-                    <option value="" selected disabled hidden>
+                    <option value="" disabled hidden>
                         분
                     </option>
                     <option value="00">00</option>

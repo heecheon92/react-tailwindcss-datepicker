@@ -3,6 +3,7 @@ dist/
 assets/
 .next/
 .rollup.cache/
+.vscode/
 
 # Files
 README.md
