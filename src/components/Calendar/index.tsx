@@ -233,14 +233,14 @@ const Calendar: React.FC<Props> = ({
     }, [date]);
 
     useEffect(() => {
-        if (!asSingle) {
+        if (!asSingle || !showTimepicker) {
             return;
         }
         const ipt = input?.current;
         changeDatepickerValue(
             {
-                startDate: period.start ? dayjs(date).format(DATE_FORMAT) : null,
-                endDate: period.end ? dayjs(date).format(DATE_FORMAT) : null,
+                startDate: period.start ? period.start : null,
+                endDate: period.end ? period.end : null,
                 startTime: time,
                 endTime: time
             },
