@@ -22,6 +22,11 @@ export default function Timepicker(props: TimepickerProps) {
             setHour(h);
             setMinute(m);
             setAMPM(a);
+        } else {
+            setHour("");
+            setMinute("");
+            setAMPM("am");
+            setIsChecked(false);
         }
     }, [value]);
 
@@ -97,7 +102,7 @@ export default function Timepicker(props: TimepickerProps) {
                         onInternalStateChange(e.target.value, minute, ampm);
                     }}
                 >
-                    <option value="" selected disabled hidden>
+                    <option value="" disabled hidden>
                         시간
                     </option>
                     <option value="01">1</option>
@@ -124,7 +129,7 @@ export default function Timepicker(props: TimepickerProps) {
                         onInternalStateChange(hour, e.target.value, ampm);
                     }}
                 >
-                    <option value="" selected disabled hidden>
+                    <option value="" disabled hidden>
                         분
                     </option>
                     <option value="00">00</option>
