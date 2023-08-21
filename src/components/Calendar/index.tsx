@@ -61,8 +61,7 @@ const Calendar: React.FC<Props> = ({
         i18n,
         startWeekOn,
         input,
-        showTimepicker,
-        changeTimepickerValue
+        showTimepicker
     } = useContext(DatepickerContext);
     loadLanguageModule(i18n);
 
@@ -194,7 +193,6 @@ const Calendar: React.FC<Props> = ({
         [
             asSingle,
             changeDatepickerValue,
-            changeTimepickerValue,
             changeDayHover,
             changePeriod,
             date,
@@ -236,7 +234,7 @@ const Calendar: React.FC<Props> = ({
 
     useEffect(() => {
         const ipt = input?.current;
-        changeTimepickerValue(
+        changeDatepickerValue(
             {
                 startDate: dayjs(date).format(DATE_FORMAT),
                 endDate: dayjs(date).format(DATE_FORMAT),

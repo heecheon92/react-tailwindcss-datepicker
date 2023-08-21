@@ -30,7 +30,6 @@ interface DatepickerStore {
     changeInputText: (text: string) => void;
     updateFirstDate: (date: dayjs.Dayjs) => void;
     changeDatepickerValue: (value: DateValueType, e?: HTMLInputElement | null | undefined) => void;
-    changeTimepickerValue: (value: DateValueType, e?: HTMLInputElement | null | undefined) => void;
     showFooter?: boolean;
     placeholder?: string | null;
     separator: string;
@@ -76,8 +75,6 @@ const DatepickerContext = createContext<DatepickerStore>({
     updateFirstDate: date => {},
     // eslint-disable-next-line @typescript-eslint/no-empty-function,@typescript-eslint/no-unused-vars
     changeDatepickerValue: (value: DateValueType, e: HTMLInputElement | null | undefined) => {},
-    // eslint-disable-next-line @typescript-eslint/no-empty-function,@typescript-eslint/no-unused-vars
-    changeTimepickerValue: (value: DateValueType, e: HTMLInputElement | null | undefined) => {},
     showFooter: false,
     value: null,
     i18n: LANGUAGE,

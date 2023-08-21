@@ -261,7 +261,6 @@ const Datepicker: React.FC<DatepickerType> = ({
             changeInputText: (newText: string) => setInputText(newText),
             updateFirstDate: (newDate: dayjs.Dayjs) => firstGotoDate(newDate),
             changeDatepickerValue: onChange,
-            changeTimepickerValue: onChange,
             showFooter,
             placeholder,
             separator,
