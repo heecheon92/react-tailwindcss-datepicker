@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { useContext, useEffect, useState } from "react";
 
 import { BG_COLOR } from "../constants";
@@ -9,19 +9,26 @@ export interface TimepickerProps {
 }
 
 export default function Timepicker(props: TimepickerProps) {
-    const { primaryColor } = useContext(DatepickerContext);
-    const [hour, setHour] = useState("01");
-    const [minute, setMinute] = useState("00");
+    const { primaryColor, value } = useContext(DatepickerContext);
+    const [hour, setHour] = useState("");
+    const [minute, setMinute] = useState("");
     const [ampm, setAMPM] = useState("am");
 
     const [isChecked, setIsChecked] = useState(false);
 
-    const handleCheckboxChange = () => {
-        setIsChecked(!isChecked);
-        setAMPM(isChecked ? "am" : "pm");
-    };
-
     useEffect(() => {
+        if (value && value.startTime && value.endTime) {
+            const [h, m, a] = value.startTime.split(":");
+            setHour(h);
+            setMinute(m);
+            setAMPM(a);
+        }
+    }, [value]);
+
+    const onInternalStateChange = useCallback((hour: string, minute: string, ampm: string) => {
+        if (hour.length === 0 || minute.length === 0) {
+            return;
+        }
         if ((hour.length > 0, minute.length > 0, ampm.length > 0)) {
             let nHour = parseInt(hour);
             let sHour = "";
@@ -44,7 +51,7 @@ export default function Timepicker(props: TimepickerProps) {
             props.onSelect(sHour, minute, ampm);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [hour, minute, ampm]);
+    }, []);
 
     const AMPMSwitch = () => {
         return (
@@ -53,7 +60,11 @@ export default function Timepicker(props: TimepickerProps) {
                     type="checkbox"
                     className="sr-only"
                     checked={isChecked}
-                    onChange={handleCheckboxChange}
+                    onChange={() => {
+                        setIsChecked(!isChecked);
+                        setAMPM(isChecked ? "am" : "pm");
+                        onInternalStateChange(hour, minute, isChecked ? "am" : "pm");
+                    }}
                 />
                 <span
                     className={`flex items-center space-x-[6px] rounded py-2 px-[10px] text-sm font-medium ${
@@ -81,8 +92,14 @@ export default function Timepicker(props: TimepickerProps) {
                     role="button"
                     className="form-select transition duration-300 ease-in-out  bg-transparent outline-none appearance-none text-md hover:opacity-80 hover:-translate-y-[2px] hover:scale-105 rounded-md"
                     value={hour}
-                    onChange={e => setHour(e.target.value)}
+                    onChange={e => {
+                        setHour(e.target.value);
+                        onInternalStateChange(e.target.value, minute, ampm);
+                    }}
                 >
+                    <option value="" selected disabled hidden>
+                        시간
+                    </option>
                     <option value="01">1</option>
                     <option value="02">2</option>
                     <option value="03">3</option>
@@ -102,8 +119,14 @@ export default function Timepicker(props: TimepickerProps) {
                     role="button"
                     value={minute}
                     className="form-select mr-4 transition duration-300 ease-in-out bg-transparent outline-none appearance-none text-md hover:opacity-80 hover:-translate-y-[2px] hover:scale-105 rounded-md"
-                    onChange={e => setMinute(e.target.value)}
+                    onChange={e => {
+                        setMinute(e.target.value);
+                        onInternalStateChange(hour, e.target.value, ampm);
+                    }}
                 >
+                    <option value="" selected disabled hidden>
+                        분
+                    </option>
                     <option value="00">00</option>
                     <option value="05">05</option>
                     <option value="10">10</option>

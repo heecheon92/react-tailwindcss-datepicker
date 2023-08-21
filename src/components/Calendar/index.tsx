@@ -233,18 +233,21 @@ const Calendar: React.FC<Props> = ({
     }, [date]);
 
     useEffect(() => {
+        if (!asSingle) {
+            return;
+        }
         const ipt = input?.current;
         changeDatepickerValue(
             {
-                startDate: dayjs(date).format(DATE_FORMAT),
-                endDate: dayjs(date).format(DATE_FORMAT),
+                startDate: period.start ? dayjs(date).format(DATE_FORMAT) : null,
+                endDate: period.end ? dayjs(date).format(DATE_FORMAT) : null,
                 startTime: time,
                 endTime: time
             },
             ipt
         );
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [time]);
+    }, [time, asSingle]);
 
     // Variables
     const calendarData = useMemo(() => {
