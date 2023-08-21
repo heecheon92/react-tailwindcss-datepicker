@@ -79,7 +79,7 @@ export default function Timepicker(props: TimepickerProps) {
                 <select
                     name="hours"
                     role="button"
-                    className="transition duration-300 ease-in-out  bg-transparent outline-none appearance-none text-md hover:opacity-80 hover:-translate-y-[2px] hover:scale-105 rounded-md"
+                    className="form-select transition duration-300 ease-in-out  bg-transparent outline-none appearance-none text-md hover:opacity-80 hover:-translate-y-[2px] hover:scale-105 rounded-md"
                     value={hour}
                     onChange={e => setHour(e.target.value)}
                 >
@@ -101,7 +101,7 @@ export default function Timepicker(props: TimepickerProps) {
                     name="minutes"
                     role="button"
                     value={minute}
-                    className="mr-4 transition duration-300 ease-in-out bg-transparent outline-none appearance-none text-md hover:opacity-80 hover:-translate-y-[2px] hover:scale-105 rounded-md"
+                    className="form-select mr-4 transition duration-300 ease-in-out bg-transparent outline-none appearance-none text-md hover:opacity-80 hover:-translate-y-[2px] hover:scale-105 rounded-md"
                     onChange={e => setMinute(e.target.value)}
                 >
                     <option value="00">00</option>

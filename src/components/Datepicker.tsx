@@ -342,7 +342,7 @@ const Datepicker: React.FC<DatepickerType> = ({
                     <Arrow ref={arrowRef} />
 
                     <div className="mt-2.5 shadow-sm border border-gray-300 px-1 py-0.5 bg-white dark:bg-slate-800 dark:text-white dark:border-slate-600 rounded-lg">
-                        <div className="flex flex-col lg:flex-row py-2">
+                        <div className="flex flex-col py-2 lg:flex-row">
                             {showShortcuts && <Shortcuts />}
 
                             <div
