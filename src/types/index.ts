@@ -5,8 +5,6 @@ import { COLORS } from "../constants";
 export interface Period {
     start: string | null;
     end: string | null;
-    startTime?: string | null;
-    endTime?: string | null;
 }
 
 interface CustomShortcuts {

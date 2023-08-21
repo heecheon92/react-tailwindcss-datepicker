@@ -1,4 +1,3 @@
-import dayjs from "dayjs";
 import React from "react";
 import { useContext, useEffect, useState } from "react";
 
@@ -6,7 +5,6 @@ import { BG_COLOR } from "../constants";
 import DatepickerContext from "../contexts/DatepickerContext";
 
 export interface TimepickerProps {
-    date?: dayjs.Dayjs;
     onSelect: (hour: string, minute: string, ampm: string) => void;
 }
 
@@ -45,11 +43,12 @@ export default function Timepicker(props: TimepickerProps) {
             }
             props.onSelect(sHour, minute, ampm);
         }
-    }, [hour, minute, ampm, props.date]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [hour, minute, ampm]);
 
     const AMPMSwitch = () => {
         return (
-            <label className="themeSwitcherTwo shadow-card relative inline-flex cursor-pointer select-none items-center justify-center rounded-md bg-white dark:bg-slate-800 p-1">
+            <label className="relative inline-flex items-center justify-center p-1 bg-white rounded-md cursor-pointer select-none themeSwitcherTwo shadow-card dark:bg-slate-800">
                 <input
                     type="checkbox"
                     className="sr-only"

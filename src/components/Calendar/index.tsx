@@ -14,7 +14,7 @@ import {
     nextMonth,
     previousMonth
 } from "../../helpers";
-import { DateType } from "../../types";
+import { DateType, TimeType } from "../../types";
 import {
     ChevronLeftIcon,
     ChevronRightIcon,
@@ -70,6 +70,8 @@ const Calendar: React.FC<Props> = ({
     const [showMonths, setShowMonths] = useState(false);
     const [showYears, setShowYears] = useState(false);
     const [year, setYear] = useState(date.year());
+    const [time, setTime] = useState<TimeType | null>(null);
+
     // Functions
     const previous = useCallback(() => {
         return getLastDaysInMonth(
@@ -129,8 +131,8 @@ const Calendar: React.FC<Props> = ({
                     {
                         startDate: dayjs(start).format(DATE_FORMAT),
                         endDate: dayjs(end).format(DATE_FORMAT),
-                        startTime: period.startTime,
-                        endTime: period.endTime
+                        startTime: time,
+                        endTime: time
                     },
                     ipt
                 );
@@ -143,9 +145,7 @@ const Calendar: React.FC<Props> = ({
                 }
                 changePeriod({
                     start: null,
-                    end: null,
-                    startTime: period.startTime,
-                    endTime: period.endTime
+                    end: null
                 });
             }
 
@@ -187,9 +187,7 @@ const Calendar: React.FC<Props> = ({
             if (!(newEnd && newStart) || showFooter) {
                 changePeriod({
                     start: newStart,
-                    end: newEnd,
-                    startTime: period.startTime,
-                    endTime: period.endTime
+                    end: newEnd
                 });
             }
         },
@@ -209,28 +207,9 @@ const Calendar: React.FC<Props> = ({
         ]
     );
 
-    const clickTime = useCallback(
-        (hour: string, minute: string, ampm: string) => {
-            const ipt = input?.current;
-            changePeriod({
-                start: period.start,
-                end: period.end,
-                startTime: `${hour}:${minute}:${ampm}`,
-                endTime: `${hour}:${minute}:${ampm}`
-            });
-
-            changeTimepickerValue(
-                {
-                    startDate: dayjs(date).format(DATE_FORMAT),
-                    endDate: dayjs(date).format(DATE_FORMAT),
-                    startTime: period.startTime,
-                    endTime: period.endTime
-                },
-                ipt
-            );
-        },
-        [clickDay, date]
-    );
+    const clickTime = useCallback((hour: string, minute: string, ampm: string) => {
+        setTime(`${hour}:${minute}:${ampm}`);
+    }, []);
 
     const clickPreviousDays = useCallback(
         (day: number) => {
@@ -254,6 +233,20 @@ const Calendar: React.FC<Props> = ({
     useEffect(() => {
         setYear(date.year());
     }, [date]);
+
+    useEffect(() => {
+        const ipt = input?.current;
+        changeTimepickerValue(
+            {
+                startDate: dayjs(date).format(DATE_FORMAT),
+                endDate: dayjs(date).format(DATE_FORMAT),
+                startTime: time,
+                endTime: time
+            },
+            ipt
+        );
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [time]);
 
     // Variables
     const calendarData = useMemo(() => {
@@ -281,7 +274,7 @@ const Calendar: React.FC<Props> = ({
                 {!showMonths && !showYears && (
                     <div className="flex-none">
                         <RoundedButton roundedFull={true} onClick={onClickPrevious}>
-                            <ChevronLeftIcon className="h-5 w-5" />
+                            <ChevronLeftIcon className="w-5 h-5" />
                         </RoundedButton>
                     </div>
                 )}
@@ -294,7 +287,7 @@ const Calendar: React.FC<Props> = ({
                                 setYear(year - 12);
                             }}
                         >
-                            <DoubleChevronLeftIcon className="h-5 w-5" />
+                            <DoubleChevronLeftIcon className="w-5 h-5" />
                         </RoundedButton>
                     </div>
                 )}
@@ -331,7 +324,7 @@ const Calendar: React.FC<Props> = ({
                                 setYear(year + 12);
                             }}
                         >
-                            <DoubleChevronRightIcon className="h-5 w-5" />
+                            <DoubleChevronRightIcon className="w-5 h-5" />
                         </RoundedButton>
                     </div>
                 )}
@@ -339,7 +332,7 @@ const Calendar: React.FC<Props> = ({
                 {!showMonths && !showYears && (
                     <div className="flex-none">
                         <RoundedButton roundedFull={true} onClick={onClickNext}>
-                            <ChevronRightIcon className="h-5 w-5" />
+                            <ChevronRightIcon className="w-5 h-5" />
                         </RoundedButton>
                     </div>
                 )}
@@ -374,7 +367,7 @@ const Calendar: React.FC<Props> = ({
                 )}
             </div>
 
-            {showTimepicker && asSingle && <Timepicker date={date} onSelect={clickTime} />}
+            {showTimepicker && asSingle && <Timepicker onSelect={clickTime} />}
         </div>
     );
 };
