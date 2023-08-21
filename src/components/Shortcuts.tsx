@@ -40,9 +40,7 @@ const ItemTemplate = React.memo((props: ItemTemplateProps) => {
             if (period.start || period.end) {
                 changePeriod({
                     start: null,
-                    end: null,
-                    startTime: period.startTime,
-                    endTime: period.endTime
+                    end: null
                 });
             }
             changePeriod(item);
@@ -134,8 +132,8 @@ const Shortcuts: React.FC = () => {
     }, []);
 
     return shortcutOptions?.length ? (
-        <div className="md:border-b mb-3 lg:mb-0 lg:border-r lg:border-b-0 border-gray-300 dark:border-gray-700 pr-1">
-            <ul className="w-full tracking-wide flex flex-wrap lg:flex-col pb-1 lg:pb-0">
+        <div className="pr-1 mb-3 border-gray-300 md:border-b lg:mb-0 lg:border-r lg:border-b-0 dark:border-gray-700">
+            <ul className="flex flex-wrap w-full pb-1 tracking-wide lg:flex-col lg:pb-0">
                 {shortcutOptions.map(([key, item], index: number) =>
                     Array.isArray(item) ? (
                         item.map((item, index) => (
