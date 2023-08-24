@@ -153,6 +153,12 @@ export default function Timepicker(props: TimepickerProps) {
                 </select>
                 <AMPMSwitch />
             </div>
+            <div className="flex flex-row gap-3 pt-6 place-content-center">
+                <button className={"w-28 h-10 rounded-md bg-[#CCCCCC]"}>취소</button>
+                <button className={`w-28 h-10 rounded-md ${`${BG_COLOR["500"][primaryColor]}`}`}>
+                    확인
+                </button>
+            </div>
         </div>
     );
 }
