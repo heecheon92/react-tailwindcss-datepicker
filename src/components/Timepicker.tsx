@@ -29,6 +29,9 @@ export default function Timepicker() {
     }, [value]);
 
     const onSelect = useCallback((hour: string, minute: string, ampm: string) => {
+        if (!hour || !minute || !ampm) {
+            return;
+        }
         if ((hour.length > 0, minute.length > 0, ampm.length > 0)) {
             let nHour = parseInt(hour);
             let sHour = "";
@@ -48,7 +51,6 @@ export default function Timepicker() {
                     sHour = hour;
                 }
             }
-
             changeSelectedTime(`${sHour}:${minute}:${ampm}`);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
