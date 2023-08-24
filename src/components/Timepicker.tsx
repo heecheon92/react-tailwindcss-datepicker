@@ -1,45 +1,34 @@
+import dayjs from "dayjs";
 import React, { useCallback } from "react";
 import { useContext, useEffect, useState } from "react";
 
-import { BG_COLOR } from "../constants";
+import { BG_COLOR, DATE_FORMAT } from "../constants";
 import DatepickerContext from "../contexts/DatepickerContext";
 
-export interface TimepickerProps {
-    onSelect: (hour: string, minute: string, ampm: string) => void;
-}
-
-export default function Timepicker(props: TimepickerProps) {
-    const { primaryColor, value } = useContext(DatepickerContext);
+export default function Timepicker() {
+    const {
+        primaryColor,
+        value,
+        changeSelectedDate,
+        changeSelectedTime,
+        hideDatepicker,
+        changeDatepickerValue,
+        selectedDate,
+        selectedTime,
+        changePeriod,
+        changeDayHover
+    } = useContext(DatepickerContext);
     const [hour, setHour] = useState("");
     const [minute, setMinute] = useState("");
     const [ampm, setAMPM] = useState("am");
-
     const [isChecked, setIsChecked] = useState(false);
 
     useEffect(() => {
-        if (value && value.startTime && value.endTime) {
-            const [h, m, a] = value.startTime.split(":");
-            if ((h && m && a && h.length > 0, m.length > 0 && a.length > 0)) {
-                let nHour: number = parseInt(h);
-                nHour = nHour < 12 ? nHour : nHour - 12;
-                let sHour = `${nHour === 0 ? 12 : nHour}`;
-                sHour = sHour.length < 2 ? `0${sHour}` : sHour;
-                setHour(sHour);
-                setMinute(m);
-                setAMPM(a);
-            }
-        } else {
-            setHour("");
-            setMinute("");
-            setAMPM("am");
-            setIsChecked(false);
-        }
+        restoreState();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [value]);
 
     const onSelect = useCallback((hour: string, minute: string, ampm: string) => {
-        if (hour.length === 0 || minute.length === 0) {
-            return;
-        }
         if ((hour.length > 0, minute.length > 0, ampm.length > 0)) {
             let nHour = parseInt(hour);
             let sHour = "";
@@ -59,10 +48,65 @@ export default function Timepicker(props: TimepickerProps) {
                     sHour = hour;
                 }
             }
-            props.onSelect(sHour, minute, ampm);
+
+            changeSelectedTime(`${sHour}:${minute}:${ampm}`);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    const onCancel = () => {
+        restoreState();
+        changeSelectedDate(value ? value : null);
+        changeSelectedTime(
+            value && value.startDate ? dayjs(value.startDate).format(DATE_FORMAT) : null
+        );
+        changePeriod({
+            start: value && value.startDate ? dayjs(value.startDate).format(DATE_FORMAT) : null,
+            end: value && value.endDate ? dayjs(value.endDate).format(DATE_FORMAT) : null
+        });
+        changeDayHover(
+            value && value.startDate ? dayjs(value.startDate).format(DATE_FORMAT) : null
+        );
+        hideDatepicker();
+    };
+
+    const onConfirm = () => {
+        if (selectedDate) {
+            changeDatepickerValue({
+                ...selectedDate,
+                startTime: selectedTime,
+                endTime: selectedTime
+            });
+            hideDatepicker();
+        }
+    };
+
+    const restoreState = () => {
+        if (value && value.startTime && value.endTime) {
+            const [h, m, a] = value.startTime.split(":");
+            if ((h && m && a && h.length > 0, m.length > 0 && a.length > 0)) {
+                let nHour: number = parseInt(h);
+                nHour = nHour < 12 ? nHour : nHour - 12;
+                let sHour = `${nHour === 0 ? 12 : nHour}`;
+                sHour = sHour.length < 2 ? `0${sHour}` : sHour;
+                setHour(sHour);
+                setMinute(m);
+                setAMPM(a);
+            }
+        } else {
+            setHour("");
+            setMinute("");
+            setAMPM("am");
+            setIsChecked(false);
+        }
+    };
+
+    useEffect(() => {
+        if (!selectedTime) {
+            restoreState();
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [selectedTime]);
 
     const AMPMSwitch = () => {
         return (
@@ -108,7 +152,7 @@ export default function Timepicker(props: TimepickerProps) {
                         onSelect(e.target.value, minute, ampm);
                     }}
                 >
-                    <option value="" disabled hidden>
+                    <option value="" disabled>
                         시간
                     </option>
                     <option value="01">1</option>
@@ -135,7 +179,7 @@ export default function Timepicker(props: TimepickerProps) {
                         onSelect(hour, e.target.value, ampm);
                     }}
                 >
-                    <option value="" disabled hidden>
+                    <option value="" disabled>
                         분
                     </option>
                     <option value="00">00</option>
@@ -154,8 +198,18 @@ export default function Timepicker(props: TimepickerProps) {
                 <AMPMSwitch />
             </div>
             <div className="flex flex-row gap-3 pt-6 place-content-center">
-                <button className={"w-28 h-10 rounded-md bg-[#CCCCCC]"}>취소</button>
-                <button className={`w-28 h-10 rounded-md ${`${BG_COLOR["500"][primaryColor]}`}`}>
+                <button onClick={onCancel} className={"w-28 h-10 rounded-md bg-[#CCCCCC]"}>
+                    취소
+                </button>
+                <button
+                    disabled={selectedDate && selectedTime ? false : true}
+                    onClick={onConfirm}
+                    className={`w-28 h-10 rounded-md ${
+                        selectedDate && selectedTime
+                            ? `${BG_COLOR["500"][primaryColor]}`
+                            : "bg-[#CCCCCC]"
+                    }`}
+                >
                     확인
                 </button>
             </div>

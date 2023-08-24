@@ -35,6 +35,10 @@ interface DatepickerStore {
     separator: string;
     i18n: string;
     value: DateValueType;
+    selectedDate: DateValueType;
+    selectedTime: string | null;
+    changeSelectedDate: (value: DateValueType) => void;
+    changeSelectedTime: (value: string | null) => void;
     disabled?: boolean;
     inputClassName?: ((className: string) => string) | string | null;
     containerClassName?: ((className: string) => string) | string | null;
@@ -77,6 +81,12 @@ const DatepickerContext = createContext<DatepickerStore>({
     changeDatepickerValue: (value: DateValueType, e: HTMLInputElement | null | undefined) => {},
     showFooter: false,
     value: null,
+    selectedDate: null,
+    selectedTime: null,
+    // eslint-disable-next-line @typescript-eslint/no-empty-function,@typescript-eslint/no-unused-vars
+    changeSelectedDate: (value: DateValueType) => {},
+    // eslint-disable-next-line @typescript-eslint/no-empty-function,@typescript-eslint/no-unused-vars
+    changeSelectedTime: (value: string | null) => {},
     i18n: LANGUAGE,
     disabled: false,
     inputClassName: "",

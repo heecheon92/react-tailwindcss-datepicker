@@ -61,12 +61,27 @@ const Datepicker: React.FC<DatepickerType> = ({
     const [dayHover, setDayHover] = useState<string | null>(null);
     const [inputText, setInputText] = useState<string>("");
     const [inputRef, setInputRef] = useState(React.createRef<HTMLInputElement>());
+    const [selectedDate, setSelectedDate] = useState(value);
+    const [selectedTime, setSelectedTime] = useState<string | null>(null);
 
     // Custom Hooks use
     useOnClickOutside(containerRef, () => {
         const container = containerRef.current;
         if (container) {
             hideDatepicker();
+            if (value && showTimepicker) {
+                setSelectedDate(value ? value : null);
+                setSelectedTime(
+                    value.startDate ? dayjs(value.startDate).format(DATE_FORMAT) : null
+                );
+                setPeriod({
+                    start: value.startDate ? dayjs(value.startDate).format(DATE_FORMAT) : null,
+                    end: value.endDate ? dayjs(value.endDate).format(DATE_FORMAT) : null
+                });
+                if (dayHover) {
+                    setDayHover(null);
+                }
+            }
         }
     });
 
@@ -193,6 +208,11 @@ const Datepicker: React.FC<DatepickerType> = ({
             const condition =
                 validDate && (startDate.isSame(endDate) || startDate.isBefore(endDate));
             if (condition) {
+                let formattedTime = "";
+                if (value && value.startTime) {
+                    const [h, m] = value.startTime.split(":");
+                    formattedTime = h + ":" + m;
+                }
                 setPeriod({
                     start: formatDate(startDate),
                     end: formatDate(endDate)
@@ -200,7 +220,7 @@ const Datepicker: React.FC<DatepickerType> = ({
                 setInputText(
                     `${formatDate(startDate, displayFormat)}${
                         asSingle ? "" : ` ${separator} ${formatDate(endDate, displayFormat)}`
-                    }`
+                    }` + `${formattedTime ? ` ${formattedTime}` : ""}`
                 );
             }
         }
@@ -266,6 +286,10 @@ const Datepicker: React.FC<DatepickerType> = ({
             separator,
             i18n,
             value,
+            selectedDate,
+            selectedTime,
+            changeSelectedDate: setSelectedDate,
+            changeSelectedTime: setSelectedTime,
             disabled,
             inputClassName,
             containerClassName,
@@ -318,7 +342,9 @@ const Datepicker: React.FC<DatepickerType> = ({
         inputRef,
         popoverDirection,
         firstGotoDate,
-        showTimepicker
+        showTimepicker,
+        selectedDate,
+        selectedTime
     ]);
 
     const containerClassNameOverload = useMemo(() => {

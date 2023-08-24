@@ -2,7 +2,7 @@ import dayjs from "dayjs";
 import isBetween from "dayjs/plugin/isBetween";
 import React, { useCallback, useContext } from "react";
 
-import { BG_COLOR, TEXT_COLOR } from "../../constants";
+import { BG_COLOR, DATE_FORMAT, TEXT_COLOR } from "../../constants";
 import DatepickerContext from "../../contexts/DatepickerContext";
 import { formatDate, nextMonth, previousMonth, classNames as cn } from "../../helpers";
 import { Period } from "../../types";
@@ -38,7 +38,9 @@ const Days: React.FC<Props> = ({
         changeDayHover,
         minDate,
         maxDate,
-        disabledDates
+        disabledDates,
+        showTimepicker,
+        selectedDate
     } = useContext(DatepickerContext);
 
     // Functions
@@ -59,7 +61,13 @@ const Days: React.FC<Props> = ({
             const fullDay = `${calendarData.date.year()}-${calendarData.date.month() + 1}-${day}`;
             let className = "";
 
-            if (dayjs(fullDay).isSame(period.start) && dayjs(fullDay).isSame(period.end)) {
+            if (
+                showTimepicker &&
+                selectedDate &&
+                dayjs(fullDay).isSame(dayjs(selectedDate.startDate).format(DATE_FORMAT))
+            ) {
+                className = ` ${BG_COLOR["500"][primaryColor]} text-white font-medium rounded-full`;
+            } else if (dayjs(fullDay).isSame(period.start) && dayjs(fullDay).isSame(period.end)) {
                 className = ` ${BG_COLOR["500"][primaryColor]} text-white font-medium rounded-full`;
             } else if (dayjs(fullDay).isSame(period.start)) {
                 className = ` ${BG_COLOR["500"][primaryColor]} text-white font-medium ${
@@ -74,18 +82,33 @@ const Days: React.FC<Props> = ({
                         : "rounded-r-full"
                 }`;
             }
-
             return {
-                active: dayjs(fullDay).isSame(period.start) || dayjs(fullDay).isSame(period.end),
+                active:
+                    dayjs(fullDay).isSame(period.start) ||
+                    dayjs(fullDay).isSame(period.end) ||
+                    dayjs(fullDay).isSame(dayjs(selectedDate?.startDate).format(DATE_FORMAT)),
                 className: className
             };
         },
-        [calendarData.date, dayHover, period.end, period.start, primaryColor]
+        [
+            calendarData.date,
+            dayHover,
+            period.end,
+            period.start,
+            primaryColor,
+            selectedDate,
+            showTimepicker
+        ]
     );
 
     const hoverClassByDay = useCallback(
         (day: number) => {
             let className = currentDateClass(day);
+
+            if (showTimepicker) {
+                return className;
+            }
+
             const fullDay = `${calendarData.date.year()}-${calendarData.date.month() + 1}-${
                 day >= 10 ? day : "0" + day
             }`;
@@ -123,7 +146,15 @@ const Days: React.FC<Props> = ({
 
             return className;
         },
-        [calendarData.date, currentDateClass, dayHover, period.end, period.start, primaryColor]
+        [
+            calendarData.date,
+            currentDateClass,
+            dayHover,
+            period.end,
+            period.start,
+            primaryColor,
+            showTimepicker
+        ]
     );
 
     const isDateTooEarly = useCallback(

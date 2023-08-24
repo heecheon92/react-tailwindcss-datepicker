@@ -36,7 +36,11 @@ const Input: React.FC<Props> = (e: Props) => {
         inputId,
         inputName,
         classNames,
-        popoverDirection
+        popoverDirection,
+        showTimepicker,
+        changePeriod,
+        changeSelectedDate,
+        changeSelectedTime
     } = useContext(DatepickerContext);
 
     // UseRefs
@@ -192,6 +196,11 @@ const Input: React.FC<Props> = (e: Props) => {
                             input
                         );
                     }
+                    if (showTimepicker) {
+                        changePeriod({ start: null, end: null });
+                        changeSelectedDate(null);
+                        changeSelectedTime(null);
+                    }
                 }
             }
         }
@@ -205,6 +214,7 @@ const Input: React.FC<Props> = (e: Props) => {
                 button.removeEventListener("click", focusInput);
             }
         };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [
         changeDatepickerValue,
         changeDayHover,
