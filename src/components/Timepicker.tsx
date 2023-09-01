@@ -94,6 +94,7 @@ export default function Timepicker() {
                 setHour(sHour);
                 setMinute(m);
                 setAMPM(a);
+                setIsChecked(a == "pm");
             }
         } else {
             setHour("");
