@@ -113,7 +113,7 @@ export default function Timepicker() {
 
     const AMPMSwitch = () => {
         return (
-            <label className="relative inline-flex items-center justify-center p-1 bg-white rounded-md cursor-pointer select-none themeSwitcherTwo shadow-card dark:bg-slate-800">
+            <label className="relative inline-flex items-center justify-center bg-white border rounded-md cursor-pointer select-none themeSwitcherTwo shadow-card dark:bg-slate-800">
                 <input
                     type="checkbox"
                     className="sr-only"
@@ -126,14 +126,14 @@ export default function Timepicker() {
                 />
                 <span
                     className={`flex items-center space-x-[6px] rounded py-2 px-[10px] text-sm font-medium ${
-                        !isChecked ? `${BG_COLOR["500"][primaryColor]}` : "text-body-color"
+                        !isChecked && `${BG_COLOR["500"][primaryColor]} text-white`
                     }`}
                 >
                     AM
                 </span>
                 <span
                     className={`flex items-center space-x-[6px] rounded py-2 px-[10px] text-sm font-medium ${
-                        isChecked ? `${BG_COLOR["500"][primaryColor]}` : "text-body-color"
+                        isChecked && `${BG_COLOR["500"][primaryColor]} text-white`
                     }`}
                 >
                     PM
@@ -144,7 +144,8 @@ export default function Timepicker() {
 
     return (
         <div className="w-full p-2 pl-3 mt-2">
-            <div className="flex justify-between">
+            <div className="pt-[20px]">시간</div>
+            <div className="flex justify-between pt-[9px]">
                 <select
                     name="hours"
                     role="button"
@@ -156,7 +157,7 @@ export default function Timepicker() {
                     }}
                 >
                     <option value="" disabled>
-                        시간
+                        시
                     </option>
                     <option value="01">1</option>
                     <option value="02">2</option>
@@ -201,16 +202,17 @@ export default function Timepicker() {
                 <AMPMSwitch />
             </div>
             <div className="flex flex-row gap-3 pt-6 place-content-center">
-                <button onClick={onCancel} className={"w-28 h-10 rounded-md bg-[#CCCCCC]"}>
+                <button
+                    onClick={onCancel}
+                    className={"w-28 h-10 rounded-md bg-[#CCCCCC] text-white"}
+                >
                     취소
                 </button>
                 <button
                     disabled={selectedDate && selectedTime ? false : true}
                     onClick={onConfirm}
-                    className={`w-28 h-10 rounded-md ${
-                        selectedDate && selectedTime
-                            ? `${BG_COLOR["500"][primaryColor]}`
-                            : "bg-[#CCCCCC]"
+                    className={`w-28 h-10 rounded-md text-white ${BG_COLOR["500"][primaryColor]} ${
+                        !(selectedDate && selectedTime) && "opacity-50"
                     }`}
                 >
                     확인

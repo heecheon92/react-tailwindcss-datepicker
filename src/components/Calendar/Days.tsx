@@ -375,7 +375,11 @@ const Days: React.FC<Props> = ({
     );
 
     return (
-        <div className="grid grid-cols-7 gap-y-0.5 my-1">
+        <div
+            className={`grid grid-cols-7 gap-y-0.5 my-1 ${
+                showTimepicker ? "border-b border-gray-300 dark:border-gray-700" : ""
+            }`}
+        >
             {calendarData.days.previous.map((item, index) => (
                 <button
                     type="button"
