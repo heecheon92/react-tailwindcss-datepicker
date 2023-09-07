@@ -113,7 +113,7 @@ export default function Timepicker() {
 
     const AMPMSwitch = () => {
         return (
-            <label className="relative inline-flex items-center justify-center bg-white border rounded-md cursor-pointer select-none themeSwitcherTwo shadow-card dark:bg-slate-800">
+            <label className="relative inline-flex items-center justify-center bg-white rounded-md cursor-pointer select-none themeSwitcherTwo shadow-card dark:bg-slate-800">
                 <input
                     type="checkbox"
                     className="sr-only"
