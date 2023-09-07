@@ -144,7 +144,7 @@ export default function Timepicker() {
 
     return (
         <div className="w-full p-2 pl-3 mt-2">
-            <div className="pt-[20px]">시간</div>
+            <div className="pt-[10px]">시간</div>
             <div className="flex justify-between pt-[9px]">
                 <select
                     name="hours"
@@ -209,10 +209,10 @@ export default function Timepicker() {
                     취소
                 </button>
                 <button
-                    disabled={selectedDate && selectedTime ? false : true}
+                    disabled={selectedDate && selectedDate.startDate && selectedTime ? false : true}
                     onClick={onConfirm}
                     className={`w-28 h-10 rounded-md text-white ${BG_COLOR["500"][primaryColor]} ${
-                        !(selectedDate && selectedTime) && "opacity-50"
+                        !(selectedDate && selectedDate.startDate && selectedTime) && "opacity-50"
                     }`}
                 >
                     확인
