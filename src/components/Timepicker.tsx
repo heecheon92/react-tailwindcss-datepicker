@@ -74,16 +74,21 @@ export default function Timepicker() {
 
     const restoreState = () => {
         if (value && value.startTime && value.endTime) {
-            const [h, m, a] = value.startTime.split(":");
-            if ((h && m && a && h.length > 0, m.length > 0 && a.length > 0)) {
-                let nHour: number = parseInt(h);
-                nHour = nHour < 12 ? nHour : nHour - 12;
-                let sHour = `${nHour === 0 ? 12 : nHour}`;
-                sHour = sHour.length < 2 ? `0${sHour}` : sHour;
-                setHour(sHour);
-                setMinute(m);
-                setAMPM(a);
-                setIsChecked(a == "pm");
+            const splitted = value.startTime.split(":");
+            if (splitted.length >= 3) {
+                const h = splitted[0];
+                const m = splitted[1];
+                const a = splitted[2];
+                if ((h && m && a && h.length > 0, m.length > 0 && a.length > 0)) {
+                    let nHour: number = parseInt(h);
+                    nHour = nHour < 12 ? nHour : nHour - 12;
+                    let sHour = `${nHour === 0 ? 12 : nHour}`;
+                    sHour = sHour.length < 2 ? `0${sHour}` : sHour;
+                    setHour(sHour);
+                    setMinute(m);
+                    setAMPM(a);
+                    setIsChecked(a == "pm");
+                }
             }
         } else {
             setHour("");
