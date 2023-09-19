@@ -58,17 +58,6 @@ export default function Timepicker() {
 
     const onCancel = () => {
         restoreState();
-        changeSelectedDate(value ? value : null);
-        changeSelectedTime(
-            value && value.startDate ? dayjs(value.startDate).format(DATE_FORMAT) : null
-        );
-        changePeriod({
-            start: value && value.startDate ? dayjs(value.startDate).format(DATE_FORMAT) : null,
-            end: value && value.endDate ? dayjs(value.endDate).format(DATE_FORMAT) : null
-        });
-        changeDayHover(
-            value && value.startDate ? dayjs(value.startDate).format(DATE_FORMAT) : null
-        );
         hideDatepicker();
     };
 
@@ -102,6 +91,15 @@ export default function Timepicker() {
             setAMPM("am");
             setIsChecked(false);
         }
+        changeSelectedDate(value ? value : null);
+        changeSelectedTime(value && value.startTime ? value.startTime : null);
+        changePeriod({
+            start: value && value.startDate ? dayjs(value.startDate).format(DATE_FORMAT) : null,
+            end: value && value.endDate ? dayjs(value.endDate).format(DATE_FORMAT) : null
+        });
+        changeDayHover(
+            value && value.startDate ? dayjs(value.startDate).format(DATE_FORMAT) : null
+        );
     };
 
     useEffect(() => {
