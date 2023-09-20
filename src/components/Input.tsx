@@ -5,6 +5,7 @@ import { BORDER_COLOR, DATE_FORMAT, RING_COLOR } from "../constants";
 import DatepickerContext from "../contexts/DatepickerContext";
 import { dateIsValid, parseFormattedDate } from "../helpers";
 
+import { parseTime } from "./Timepicker";
 import ToggleButton from "./ToggleButton";
 
 type Props = {
@@ -73,11 +74,22 @@ const Input: React.FC<Props> = (e: Props) => {
             const inputValue = e.target.value;
 
             const dates = [];
+            let maybeTime = "";
 
             if (asSingle) {
                 const date = parseFormattedDate(inputValue, displayFormat);
                 if (dateIsValid(date.toDate())) {
                     dates.push(date.format(DATE_FORMAT));
+                }
+                if (showTimepicker) {
+                    const splitted = inputValue.split(" ");
+                    if (splitted.length > 1) {
+                        const time = parseTime(splitted[1]);
+                        if (time && time.hour && time.minute && time.ampm) {
+                            maybeTime = `${time.hour}:${time.minute}:${time.ampm}`;
+                            changeSelectedTime(maybeTime);
+                        }
+                    }
                 }
             } else {
                 const parsed = inputValue.split(separator);
@@ -108,7 +120,9 @@ const Input: React.FC<Props> = (e: Props) => {
                 changeDatepickerValue(
                     {
                         startDate: dates[0],
-                        endDate: dates[1] || dates[0]
+                        endDate: dates[1] || dates[0],
+                        startTime: maybeTime ? maybeTime : undefined,
+                        endTime: maybeTime ? maybeTime : undefined
                     },
                     e.target
                 );
@@ -118,7 +132,16 @@ const Input: React.FC<Props> = (e: Props) => {
 
             changeInputText(e.target.value);
         },
-        [asSingle, displayFormat, separator, changeDatepickerValue, changeDayHover, changeInputText]
+        [
+            asSingle,
+            displayFormat,
+            separator,
+            changeDatepickerValue,
+            changeDayHover,
+            changeInputText,
+            showTimepicker,
+            changeSelectedTime
+        ]
     );
 
     const handleInputKeyDown = useCallback(

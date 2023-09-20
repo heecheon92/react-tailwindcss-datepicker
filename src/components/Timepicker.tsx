@@ -5,6 +5,24 @@ import { useContext, useEffect, useState } from "react";
 import { BG_COLOR, DATE_FORMAT } from "../constants";
 import DatepickerContext from "../contexts/DatepickerContext";
 
+export function parseTime(arg: string): { hour: string; minute: string; ampm: string } | null {
+    const splitted = arg.split(":");
+    if (splitted.length > 1) {
+        let nHour = parseInt(splitted[0]);
+        nHour = nHour < 12 ? nHour : nHour - 12;
+        let sHour = `${nHour === 0 ? 12 : nHour}`;
+        const sMinute = splitted[1];
+        sHour = sHour.length < 2 ? `0${sHour}` : sHour;
+        const ampm = nHour < 12 ? "am" : "pm";
+        return {
+            hour: sHour,
+            minute: sMinute,
+            ampm: ampm
+        };
+    }
+    return null;
+}
+
 export default function Timepicker() {
     const {
         primaryColor,
