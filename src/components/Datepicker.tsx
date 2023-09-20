@@ -71,9 +71,7 @@ const Datepicker: React.FC<DatepickerType> = ({
             hideDatepicker();
             if (value && showTimepicker) {
                 setSelectedDate(value ? value : null);
-                setSelectedTime(
-                    value.startDate ? dayjs(value.startDate).format(DATE_FORMAT) : null
-                );
+                setSelectedTime(value.startTime ? value.startTime : null);
                 setPeriod({
                     start: value.startDate ? dayjs(value.startDate).format(DATE_FORMAT) : null,
                     end: value.endDate ? dayjs(value.endDate).format(DATE_FORMAT) : null
@@ -212,6 +210,7 @@ const Datepicker: React.FC<DatepickerType> = ({
                 if (value && value.startTime) {
                     const [h, m] = value.startTime.split(":");
                     formattedTime = h + ":" + m;
+                    setSelectedDate(value);
                 }
                 setPeriod({
                     start: formatDate(startDate),
